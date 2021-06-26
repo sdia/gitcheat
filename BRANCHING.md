@@ -42,12 +42,12 @@ a merge commit.
 
 ## merge conflicts
 
-
 remember HEAD is your current branch in which you want to merge in
 use git status and follow instructions
 
 
 ## more branches
+
  ```bash
 $ git branch
 $ git branch --all
@@ -63,4 +63,31 @@ $ git branch --move bad-branch-name corrected-branch-name
 $ git push origin --delete bad-branch-name
 
 
- ```
+
+
+$ git branch --move main master
+$ git push --set-upstream origin master
+$ git push origin --delete main
+
+```
+
+
+## remote branches
+... or orgin/master vs master
+
+
+## pushing
+```bash
+$ git push origin server-fix
+$ git fetch origin
+$ git checkout -b serverfix origin/serverfix
+```
+
+
+## tracking branches
+```bash
+$ git checkout --track origin/serverfix
+# is a shorthand for: git checkout -b serverfix origin/serverfix
+
+
+```
