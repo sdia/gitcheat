@@ -33,17 +33,48 @@ $ git log -- path/to/file
 ```
 
 
-## undoing things
+## amending commits
 ```bash
 $ git commit --amend
 # you commit too early and forgot to add files
+# this will use the current staging area in the new commit
+# this will create a new commit, the old one never happened; carefull in public branch
+# only amend commit that are local and not yet pushed
 
-
+$ git commit -m 'Initial commit'
+$ git add forgotten_file
+$ git commit --amend
 ```
 
 
+## unstaging staged file
+```bash
+# git status,  is your friend!
+$ git add *
+$ git status
+$ git reset HEAD README.md
+```
 
 
+## unmodifying a modified file
+```bash
+# git checkout is a dangerous command
+# all local changes will be lost
+# consider stashing and branching
+$ git status
+$ git checkout -- README.md
+```
+
+
+## git restore
+```bash
+# git restore, introduced in Git ver 2.23.0
+# an alternative to git reset
+$ git restore --staged README.md
+$ git restore README.md
+
+
+```
 
 
 ## Showing your remotes
