@@ -89,5 +89,28 @@ $ git checkout -b serverfix origin/serverfix
 $ git checkout --track origin/serverfix
 # is a shorthand for: git checkout -b serverfix origin/serverfix
 
+$ git checkout serverfix  # if the branch name exist already on remote,
+# this shortcut command will checkout and track in one go
+
+$ git checkout -b sf origin/serverfix # now your local branch sf will pull
+# from origin/serverfix
+
+$ git branch -u origin/serverfix # set upstream
+
+$ git branch -vv  # maybe run; git fetch --all
 
 ```
+
+
+## pulling
+```bash
+$ git fetch && git merge  ## this is git pull
+# generally it is better to simply use the fetch and merge commands explicitly
+# as the magic of git pull can often be confusing
+```
+
+
+
+
+
+## basic rebase
