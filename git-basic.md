@@ -159,3 +159,52 @@
 - git checkout -b version1.4 v1.4
 
 ### aliases
+
+### branching
+
+# how to create new branch my-branch (using branch)?
+- git branch my-branch
+
+# the name of the pointer to the branch you are currently on?
+- HEAD
+
+# how to switch to branch my-branch (using checkout)?
+- git checkout my-branch
+
+# how to create branch my-branch and switch to the newly created (using checkout)?
+- git checkout -b my-branch
+
+# how to switch to branch my-branch (using switch)?
+- git switch my-branch
+
+# how to create branch my-branch and switch to the newly created (using switch)?
+- git switch -c my-branch
+- git switch --create my-branch
+
+# if you are on master how to merge the branch hotfix into master?
+- git merge hotfix
+
+# how to delete locally the branch hotfix?
+- git branch -d hotfix
+
+# how to list your current branches?
+- git branch
+
+# how to list your current branches and see the last commit on each branch?
+- git branch -v
+
+# how to list your branches and filter the one you have already merged to the current branch?
+- git branch --merged
+
+# how to see all the branches that contain work you haven’t yet merged in?
+- git branch --no-merged
+
+# how to rename branch bad-branch to good-branch?
+- git branch --move bad-branch good-branch
+
+
+# how to publish the branch my-branch on the remote named origin?
+- git push --set-upstream origin my-branch
+
+# how to delete the branch my-branch on the remote named origin?
+- git push --delete origin my-branch
