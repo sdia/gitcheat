@@ -158,10 +158,6 @@
 # how to create a branch name version1.4 from tag v1.4 (using checkout)?
 - git checkout -b version1.4 v1.4
 
-### aliases
-
-### branching
-
 # how to create new branch my-branch (using branch)?
 - git branch my-branch
 
@@ -187,7 +183,7 @@
 # how to delete locally the branch hotfix?
 - git branch -d hotfix
 
-# how to list your current branches?
+# how to list your local branches?
 - git branch
 
 # how to list your current branches and see the last commit on each branch?
@@ -202,9 +198,111 @@
 # how to rename branch bad-branch to good-branch?
 - git branch --move bad-branch good-branch
 
-
 # how to publish the branch my-branch on the remote named origin?
-- git push --set-upstream origin my-branch
+- git push origin --set-upstream my-branch
+- git push origin -u my-branch
 
 # how to delete the branch my-branch on the remote named origin?
-- git push --delete origin my-branch
+- git push origin --delete my-branch
+
+# how to list all branches local and remote?
+- git branch --all
+
+# how to get full information of remote branches on the origin remote?
+- git remote show origin
+
+# what is the full command to push to the branch my-branch on the remote origin?
+- git push origin my-branch
+
+# how to push from my-branch to the-other-branch on remote origin?
+- git push origin my-branch:the-other-branch
+
+# how to push from my-branch to the-other-branch on remote origin and track from now on?
+- git push origin -u my-branch:the-other-branch
+
+# your colleague created a new branch their-branch on remote origin, create a new branch my-branch from it?
+- git checkout -b my-branch origin/their-branch
+
+# how to make your current branch track orign/their-branch?
+- git branch -u origin/their-branch
+- git branch --set-upstream origin/their-branch
+
+# how to see branch with tracking information?
+- git branch -vv
+
+# how to rebase your current branch on master?
+- git rebase master
+
+# how to check for whitespaces error before commit?
+- git diff --check
+
+# how to partially stage changes in the same file?
+- git add --patch
+- git add -p
+
+# how to display the commits in origin/develop that are not in my-branch?
+- git log my-branch..origin/develop
+
+# how te see commit history excluding merge?
+- git log --no-merges
+
+# how to compare commits between my-branch(behind) and origin/develop(ahead) excluding merges?
+- git log --no-merges my-branch..origin/develop
+
+# how to merge my-branch squashing all commits into one?
+- git merge --squash my-branch
+
+# how to check the work my-branch has introduced since its common ancestor with master?
+- git diff master...my-branch
+
+# how to pull a single commit e43a6 into your current branch?
+- git cherry-pick e43a6
+
+# how to generate a build number from master?
+- git describe master
+
+# how to inspect commit 2bdf86
+- git show 2bdf86
+
+# how to inspect branch my-branch?
+- git show my-branch
+
+# how to see a logs of where HEAD had been?
+- git reflog
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##
