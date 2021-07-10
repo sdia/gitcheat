@@ -25,3 +25,15 @@ purple =
 
 green =
     rgb255 90 167 148
+
+
+
+-- https://htmlcolors.com/palette/1707/washed-out-day-dreams
+
+
+gray_dark =
+    rgb255 124 127 135
+
+
+gray_light =
+    rgb255 186 186 186

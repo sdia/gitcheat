@@ -147,7 +147,16 @@ update msg model =
 view : Model -> Html Msg
 view model =
     layout [] <|
-        column [ explain Debug.todo, width fill, height fill ]
+        column
+            [ width fill
+            , height fill
+            , Font.family
+                [ Font.typeface "IBM Plex Mono"
+                , Font.monospace
+                ]
+
+            -- , explain Debug.todo
+            ]
             [ navBar
             , bodyContent model
             , footerContent
@@ -156,7 +165,7 @@ view model =
 
 navBar : Element msg
 navBar =
-    row [ width fill ] [ text "navbar" ]
+    row [ width fill ] [ text "Git trainer" ]
 
 
 bodyContent : Model -> Element Msg
@@ -176,19 +185,26 @@ bodyContent model =
                         { onPress = Just msg, label = text t }
 
                 input_button_show_next =
-                    if model.show_solution then
-                        make_button Next "next" red
+                    if model.current_answer_status == Correct then
+                        make_button Next "next >" teal
+
+                    else if model.show_solution then
+                        make_button Next "next >" teal
 
                     else
-                        make_button ShowSolution "show" teal
+                        make_button ShowSolution "show" red
             in
             column [ width fill, height fill ]
                 [ row
                     [ centerX
                     , centerY
-                    , padding 20
+                    , paddingXY 20 50
+                    , Font.size 30
                     ]
-                    [ text question.question ]
+                    [ question.question
+                        |> capitalizeString
+                        |> text
+                    ]
                 , row
                     [ centerX
                     , centerY
@@ -207,7 +223,7 @@ bodyContent model =
 
 footerContent : Element msg
 footerContent =
-    row [ width fill ] [ text "footer" ]
+    row [ width fill ] [ text "copyright sdia.pyc@gmail.com, 2021" ]
 
 
 viewInput : Model -> String -> String -> List Answer -> (String -> Msg) -> Element Msg
@@ -220,15 +236,11 @@ viewInput model hint current_answer answers toMsg =
             in
             case answer_status of
                 Correct ->
-                    if model.show_solution then
-                        Font.color (rgb 0 0 0)
-
-                    else
-                        Font.color green
+                    Font.color green
 
                 NotCorrect ->
                     if track_progress_answer current_answer answers then
-                        Font.color (rgb 0 0 0)
+                        Font.color gray_dark
 
                     else
                         Font.color red
@@ -252,15 +264,15 @@ viewInput model hint current_answer answers toMsg =
         , onEnter EnterWasPressed
         , centerX
         , Font.family
-            [ Font.typeface "Open Sans"
+            [ Font.typeface "IBM Plex Mono"
             , Font.monospace
             ]
         , below
             (if model.current_answer_status == Correct then
                 el
-                    [ Font.color purple
+                    [ Font.color gray_light
                     , Font.size 15
-                    , moveDown 5
+                    , moveDown 10
                     ]
                     (text "excellent!, press enter to continue")
 
@@ -294,3 +306,18 @@ onEnter msg =
                     )
             )
         )
+
+
+capitalizeString : String -> String
+capitalizeString s =
+    let
+        ts =
+            String.trim s
+
+        head_s =
+            ts |> String.left 1 |> String.toUpper
+
+        tail_s =
+            String.dropLeft 1 ts
+    in
+    head_s ++ tail_s

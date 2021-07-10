@@ -11851,6 +11851,15 @@ var $mdgriffith$elm_ui$Element$Input$button = F2(
 				_List_fromArray(
 					[label])));
 	});
+var $elm$core$String$toUpper = _String_toUpper;
+var $elm$core$String$trim = _String_trim;
+var $author$project$Main$capitalizeString = function (s) {
+	var ts = $elm$core$String$trim(s);
+	var tail_s = A2($elm$core$String$dropLeft, 1, ts);
+	var head_s = $elm$core$String$toUpper(
+		A2($elm$core$String$left, 1, ts));
+	return _Utils_ap(head_s, tail_s);
+};
 var $mdgriffith$elm_ui$Internal$Model$AlignX = function (a) {
 	return {$: 'AlignX', a: a};
 };
@@ -12017,6 +12026,16 @@ var $mdgriffith$elm_ui$Element$row = F2(
 						attrs))),
 			$mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
 	});
+var $mdgriffith$elm_ui$Internal$Model$FontSize = function (a) {
+	return {$: 'FontSize', a: a};
+};
+var $mdgriffith$elm_ui$Internal$Flag$fontSize = $mdgriffith$elm_ui$Internal$Flag$flag(4);
+var $mdgriffith$elm_ui$Element$Font$size = function (i) {
+	return A2(
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$fontSize,
+		$mdgriffith$elm_ui$Internal$Model$FontSize(i));
+};
 var $mdgriffith$elm_ui$Internal$Model$SpacingStyle = F3(
 	function (a, b, c) {
 		return {$: 'SpacingStyle', a: a, b: b, c: c};
@@ -12130,6 +12149,8 @@ var $mdgriffith$elm_ui$Element$Font$family = function (families) {
 			A3($elm$core$List$foldl, $mdgriffith$elm_ui$Internal$Model$renderFontClassName, 'ff-', families),
 			families));
 };
+var $author$project$ColorSummer$gray_dark = A3($mdgriffith$elm_ui$Element$rgb255, 124, 127, 135);
+var $author$project$ColorSummer$gray_light = A3($mdgriffith$elm_ui$Element$rgb255, 186, 186, 186);
 var $author$project$ColorSummer$green = A3($mdgriffith$elm_ui$Element$rgb255, 90, 167, 148);
 var $elm$core$List$head = function (list) {
 	if (list.b) {
@@ -12174,17 +12195,6 @@ var $author$project$Main$onEnter = function (msg) {
 					return (key === 'Enter') ? $elm$json$Json$Decode$succeed(msg) : $elm$json$Json$Decode$fail('Not the enter key');
 				},
 				A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string))));
-};
-var $author$project$ColorSummer$purple = A3($mdgriffith$elm_ui$Element$rgb255, 194, 143, 213);
-var $mdgriffith$elm_ui$Internal$Model$FontSize = function (a) {
-	return {$: 'FontSize', a: a};
-};
-var $mdgriffith$elm_ui$Internal$Flag$fontSize = $mdgriffith$elm_ui$Internal$Flag$flag(4);
-var $mdgriffith$elm_ui$Element$Font$size = function (i) {
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$StyleClass,
-		$mdgriffith$elm_ui$Internal$Flag$fontSize,
-		$mdgriffith$elm_ui$Internal$Model$FontSize(i));
 };
 var $mdgriffith$elm_ui$Element$Input$TextInputNode = function (a) {
 	return {$: 'TextInputNode', a: a};
@@ -13080,11 +13090,9 @@ var $author$project$Main$viewInput = F5(
 		var dStyle = function () {
 			var answer_status = A2($author$project$Main$evaluate_answer, model, current_answer);
 			if (answer_status.$ === 'Correct') {
-				return model.show_solution ? $mdgriffith$elm_ui$Element$Font$color(
-					A3($mdgriffith$elm_ui$Element$rgb, 0, 0, 0)) : $mdgriffith$elm_ui$Element$Font$color($author$project$ColorSummer$green);
+				return $mdgriffith$elm_ui$Element$Font$color($author$project$ColorSummer$green);
 			} else {
-				return A2($author$project$Main$track_progress_answer, current_answer, answers) ? $mdgriffith$elm_ui$Element$Font$color(
-					A3($mdgriffith$elm_ui$Element$rgb, 0, 0, 0)) : $mdgriffith$elm_ui$Element$Font$color($author$project$ColorSummer$red);
+				return A2($author$project$Main$track_progress_answer, current_answer, answers) ? $mdgriffith$elm_ui$Element$Font$color($author$project$ColorSummer$gray_dark) : $mdgriffith$elm_ui$Element$Font$color($author$project$ColorSummer$red);
 			}
 		}();
 		var answer_to_show = function () {
@@ -13111,7 +13119,7 @@ var $author$project$Main$viewInput = F5(
 					$mdgriffith$elm_ui$Element$Font$family(
 					_List_fromArray(
 						[
-							$mdgriffith$elm_ui$Element$Font$typeface('Open Sans'),
+							$mdgriffith$elm_ui$Element$Font$typeface('IBM Plex Mono'),
 							$mdgriffith$elm_ui$Element$Font$monospace
 						])),
 					$mdgriffith$elm_ui$Element$below(
@@ -13119,9 +13127,9 @@ var $author$project$Main$viewInput = F5(
 						$mdgriffith$elm_ui$Element$el,
 						_List_fromArray(
 							[
-								$mdgriffith$elm_ui$Element$Font$color($author$project$ColorSummer$purple),
+								$mdgriffith$elm_ui$Element$Font$color($author$project$ColorSummer$gray_light),
 								$mdgriffith$elm_ui$Element$Font$size(15),
-								$mdgriffith$elm_ui$Element$moveDown(5)
+								$mdgriffith$elm_ui$Element$moveDown(10)
 							]),
 						$mdgriffith$elm_ui$Element$text('excellent!, press enter to continue')) : $mdgriffith$elm_ui$Element$none)
 				]),
@@ -13155,7 +13163,7 @@ var $author$project$Main$bodyContent = function (model) {
 						onPress: $elm$core$Maybe$Just(msg)
 					});
 			});
-		var input_button_show_next = model.show_solution ? A3(make_button, $author$project$Main$Next, 'next', $author$project$ColorSummer$red) : A3(make_button, $author$project$Main$ShowSolution, 'show', $author$project$ColorSummer$teal);
+		var input_button_show_next = _Utils_eq(model.current_answer_status, $author$project$Main$Correct) ? A3(make_button, $author$project$Main$Next, 'next >', $author$project$ColorSummer$teal) : (model.show_solution ? A3(make_button, $author$project$Main$Next, 'next >', $author$project$ColorSummer$teal) : A3(make_button, $author$project$Main$ShowSolution, 'show', $author$project$ColorSummer$red));
 		return A2(
 			$mdgriffith$elm_ui$Element$column,
 			_List_fromArray(
@@ -13171,11 +13179,13 @@ var $author$project$Main$bodyContent = function (model) {
 						[
 							$mdgriffith$elm_ui$Element$centerX,
 							$mdgriffith$elm_ui$Element$centerY,
-							$mdgriffith$elm_ui$Element$padding(20)
+							A2($mdgriffith$elm_ui$Element$paddingXY, 20, 50),
+							$mdgriffith$elm_ui$Element$Font$size(30)
 						]),
 					_List_fromArray(
 						[
-							$mdgriffith$elm_ui$Element$text(question.question)
+							$mdgriffith$elm_ui$Element$text(
+							$author$project$Main$capitalizeString(question.question))
 						])),
 					A2(
 					$mdgriffith$elm_ui$Element$row,
@@ -13204,9 +13214,6 @@ var $author$project$Main$bodyContent = function (model) {
 				]));
 	}
 };
-var $mdgriffith$elm_ui$Element$explain = function (_v0) {
-	return $mdgriffith$elm_ui$Internal$Model$htmlClass('explain');
-};
 var $author$project$Main$footerContent = A2(
 	$mdgriffith$elm_ui$Element$row,
 	_List_fromArray(
@@ -13215,7 +13222,7 @@ var $author$project$Main$footerContent = A2(
 		]),
 	_List_fromArray(
 		[
-			$mdgriffith$elm_ui$Element$text('footer')
+			$mdgriffith$elm_ui$Element$text('copyright sdia.pyc@gmail.com, 2021')
 		]));
 var $mdgriffith$elm_ui$Internal$Model$OnlyDynamic = F2(
 	function (a, b) {
@@ -13430,9 +13437,8 @@ var $author$project$Main$navBar = A2(
 		]),
 	_List_fromArray(
 		[
-			$mdgriffith$elm_ui$Element$text('navbar')
+			$mdgriffith$elm_ui$Element$text('Git trainer')
 		]));
-var $elm$core$Debug$todo = _Debug_todo;
 var $author$project$Main$view = function (model) {
 	return A2(
 		$mdgriffith$elm_ui$Element$layout,
@@ -13441,15 +13447,14 @@ var $author$project$Main$view = function (model) {
 			$mdgriffith$elm_ui$Element$column,
 			_List_fromArray(
 				[
-					$mdgriffith$elm_ui$Element$explain(
-					_Debug_todo(
-						'Main',
-						{
-							start: {line: 150, column: 26},
-							end: {line: 150, column: 36}
-						})),
 					$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-					$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill)
+					$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
+					$mdgriffith$elm_ui$Element$Font$family(
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$Font$typeface('IBM Plex Mono'),
+							$mdgriffith$elm_ui$Element$Font$monospace
+						]))
 				]),
 			_List_fromArray(
 				[
