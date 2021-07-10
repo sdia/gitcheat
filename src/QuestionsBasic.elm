@@ -202,11 +202,11 @@ questions =
         "hint"
         [ "git tag -d v1.4" ]
     , Question
-        "how to delete a remote tag (using refs)?"
+        "how to delete a remote tag v1.4 (using refs)?"
         "hint"
         [ "git push origin :refs/tags/v1.4" ]
     , Question
-        "how to delete a remote tag (using --delete)?"
+        "how to delete a remote tag v1.4 (using --delete)?"
         "hint"
         [ "git push origin --delete v1.4" ]
     , Question
