@@ -3,45 +3,58 @@ module Main exposing (Model, Msg(..), init, main, update, view)
 import Browser
 import Html exposing (Attribute, Html, button, div, input, text)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick, onInput)
-import Question exposing (Answer, Question)
+import Html.Events exposing (keyCode, on, onClick, onInput)
+import Json.Decode as Json
+import Question exposing (Answer, Question, questionGenerator)
 import QuestionsBasic exposing (questions)
+import Random
 
 
+type alias Model =
+    { question : Maybe Question
+    , feedback : String
+    , current_answer : String
+    , current_answer_status : AnswerStatus
+    }
 
--- MAIN
+
+type Msg
+    = NewQuestion Question
+    | Answer String
+    | Restart
+    | Next
+
+
+type AnswerStatus
+    = Correct
+    | NotCorrect
 
 
 main =
-    Browser.sandbox { init = init, update = update, view = view }
+    Browser.element
+        { init = init
+        , update = update
+        , subscriptions = subscriptions
+        , view = view
+        }
 
 
+evaluate_answer : Model -> Answer -> AnswerStatus
+evaluate_answer model answer =
+    case model.question of
+        Just question ->
+            if List.member answer question.answers then
+                Correct
 
--- TYPE
--- type alias Question =
---     { question : String
---     , answers : List Answer
---     , hint : String
---     }
---
---
--- type alias Answer =
---     String
+            else
+                NotCorrect
 
-
-evaluate_answer : Answer -> List Answer -> Bool
-evaluate_answer current_answer answers =
-    if List.member current_answer answers then
-        True
-
-    else
-        False
+        Nothing ->
+            NotCorrect
 
 
 trac_progress_answer : Answer -> List Answer -> Bool
 trac_progress_answer current_answer answers =
-    -- String.startsWith  x y
-    -- See if the second string starts with the first one.
     List.any (String.startsWith current_answer) answers
 
 
@@ -50,55 +63,54 @@ initial_question =
     List.head questions
 
 
-
---     Question
---         "How to commit"
---         "try this hint"
---         [ "git commit", "b", "c" ]
---
--- MODEL
-
-
-type alias Model =
-    { question : Maybe Question
-    , feedback : String
-    , current_answer : String
-    }
-
-
-init : Model
-init =
-    { question = initial_question
-    , feedback = ""
-    , current_answer = ""
-    }
+init : () -> ( Model, Cmd Msg )
+init _ =
+    let
+        model =
+            { question = initial_question
+            , feedback = ""
+            , current_answer = ""
+            , current_answer_status = NotCorrect
+            }
+    in
+    ( model
+      -- , Cmd.none
+    , Random.generate NewQuestion (questionGenerator questions)
+    )
 
 
-
--- UPDATE
-
-
-type Msg
-    = NextQuestion
-    | Answer String
-    | Restart
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        NextQuestion ->
-            model
+        Next ->
+            ( model
+            , Random.generate NewQuestion (questionGenerator questions)
+            )
 
-        Answer t ->
-            { model | current_answer = t }
+        NewQuestion q ->
+            ( { model
+                | question = Just q
+                , current_answer = ""
+                , current_answer_status = NotCorrect
+              }
+            , Cmd.none
+            )
+
+        Answer answer ->
+            ( { model
+                | current_answer = answer
+                , current_answer_status = evaluate_answer model answer
+              }
+            , Cmd.none
+            )
 
         Restart ->
-            init
-
-
-
--- VIEW
+            init ()
 
 
 view : Model -> Html Msg
@@ -108,9 +120,9 @@ view model =
             div []
                 [ div [] [ text question.question ]
                 , viewInput "text" model question.hint model.current_answer question.answers Answer
-                , button [ onClick NextQuestion ] [ text "next" ]
+                , button [ onClick Next ] [ text "next" ]
                 , button [ onClick Restart ] [ text "restart" ]
-                , viewValidation model.current_answer question.answers
+                , viewValidation model
                 ]
 
         Nothing ->
@@ -121,14 +133,20 @@ viewInput : String -> Model -> String -> String -> List Answer -> (String -> msg
 viewInput t model hint current_answer answers toMsg =
     let
         dStyle =
-            if evaluate_answer current_answer answers then
-                style "color" "green"
+            let
+                answer_status =
+                    evaluate_answer model current_answer
+            in
+            case answer_status of
+                Correct ->
+                    style "color" "green"
 
-            else if trac_progress_answer current_answer answers then
-                style "" ""
+                NotCorrect ->
+                    if trac_progress_answer current_answer answers then
+                        style "" ""
 
-            else
-                style "color" "red"
+                    else
+                        style "color" "red"
     in
     input
         [ type_ t
@@ -140,11 +158,11 @@ viewInput t model hint current_answer answers toMsg =
         []
 
 
-viewValidation : Answer -> List Answer -> Html msg
-viewValidation current_answer answers =
-    if evaluate_answer current_answer answers then
-        div [ style "color" "green" ] [ text "well done!" ]
+viewValidation : Model -> Html msg
+viewValidation model =
+    case model.current_answer_status of
+        Correct ->
+            div [ style "color" "green" ] [ text "well done!" ]
 
-    else
-        -- div [ style "color" "red" ] [ text "Wrong answer!" ]
-        div [] []
+        NotCorrect ->
+            div [] []
